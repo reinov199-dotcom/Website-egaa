@@ -802,6 +802,7 @@ function unlock() {
   if (document.getElementById("pin").value === CORRECT_PIN) {
     document.getElementById("lock").style.display = "none";
     document.getElementById("site").style.display = "block";
+    window.scrollTo(0, 0);
     loadEverything();
   } else {
     document.getElementById("error").textContent =
