@@ -1,0 +1,963 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>untukk cowokuu</title>
+
+<style>
+:root {
+  --bg: #faf7fd;
+  --lilac: #d8c3ee;
+  --purple: #b99bd7;
+  --deep: #765b8c;
+  --text: #594665;
+  --muted: #a18eae;
+  --white: #ffffff;
+  --pink: #f5e5f1;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+
+#lock {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(ellipse at 15% 10%, #e6d8f8, transparent 50%),
+    radial-gradient(ellipse at 90% 85%, #f5e0f1, transparent 48%),
+    #faf7fd;
+}
+
+.lockbox {
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  padding: 35px 25px;
+  border: 1px solid #e8dcf2;
+  border-radius: 30px;
+  background: #ffffffc9;
+  box-shadow: 0 20px 65px #bfa7d326;
+  backdrop-filter: blur(15px);
+}
+
+.lock-heart {
+  font-size: 55px;
+  color: #b99bd7;
+  animation: pulse 2s infinite;
+}
+
+.eyebrow {
+  font: 10px Arial, sans-serif;
+  letter-spacing: 3px;
+  color: #a78abd;
+}
+
+.lockbox h1 {
+  font-size: 34px;
+  font-weight: normal;
+  color: #806594;
+  margin: 17px 0 12px;
+}
+
+.muted {
+  color: #a18eae;
+  font: 13px/1.9 Arial, sans-serif;
+}
+
+#pin {
+  width: 100%;
+  padding: 15px;
+  margin: 20px 0 12px;
+  text-align: center;
+  letter-spacing: 12px;
+  color: #765b8c;
+  background: #faf7fd;
+  border: 1px solid #e2d3ee;
+  border-radius: 15px;
+  outline: none;
+}
+
+.btn {
+  padding: 13px 20px;
+  border: 0;
+  border-radius: 30px;
+  color: white;
+  background: linear-gradient(110deg, #cbb0e7, #b69ad5);
+  box-shadow: 0 5px 15px #c2a9df35;
+  font: 13px Arial, sans-serif;
+  font-weight: bold;
+}
+
+.btn.full { width: 100%; }
+
+.btn:active { transform: scale(.98); }
+
+#error {
+  color: #bd82a8;
+  font: 12px Arial, sans-serif;
+  margin-top: 12px;
+}
+
+#site { display: none; }
+
+.hero {
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 45px 22px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 20%, #e5d4f6, transparent 58%),
+    radial-gradient(ellipse at 10% 95%, #f5e4f2, transparent 45%),
+    linear-gradient(160deg, #f6effb, #fcf9fe);
+}
+
+.hero:before, .hero:after {
+  content: "✦";
+  position: absolute;
+  color: #c4a6df;
+  font-size: 24px;
+  opacity: .75;
+}
+
+.hero:before { top: 16%; left: 13%; }
+.hero:after { bottom: 18%; right: 13%; }
+
+.hero-inner {
+  max-width: 540px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: clamp(45px, 11vw, 76px);
+  line-height: 1.05;
+  margin: 25px 0;
+  font-weight: normal;
+  color: #806594;
+}
+
+.hero h1 em {
+  color: #b18bcf;
+  font-weight: normal;
+}
+
+.hero p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #9b86aa;
+}
+
+.heartline {
+  font-size: 22px;
+  letter-spacing: 9px;
+  margin: 25px;
+  color: #b795d2;
+}
+
+.scrollhint {
+  margin-top: 55px;
+  font: 10px Arial, sans-serif;
+  letter-spacing: 3px;
+  color: #b19dbd;
+}
+
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 12px;
+  background: #fcf9fdef;
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid #eee4f4;
+  scrollbar-width: none;
+}
+
+nav a {
+  flex-shrink: 0;
+  text-decoration: none;
+  color: #866b9b;
+  font: 11px Arial, sans-serif;
+  padding: 10px 13px;
+  border: 1px solid #e9ddf2;
+  border-radius: 22px;
+  background: white;
+}
+
+nav a:active { background: #f0e6f8; }
+
+main {
+  max-width: 760px;
+  margin: auto;
+  padding: 12px 18px 50px;
+}
+
+section { padding: 54px 0 20px; }
+
+.kicker {
+  font: 10px Arial, sans-serif;
+  letter-spacing: 3px;
+  color: #b18bcf;
+}
+
+.section-title {
+  font-size: 32px;
+  line-height: 1.25;
+  margin: 12px 0;
+  font-weight: normal;
+  color: #806594;
+}
+
+.intro {
+  color: #a18eae;
+  font: 13px/1.9 Arial, sans-serif;
+}
+
+.card {
+  background: linear-gradient(145deg, #ffffff, #f8f2fc);
+  border: 1px solid #eee3f5;
+  border-radius: 22px;
+  padding: 22px;
+  margin-top: 17px;
+  box-shadow: 0 6px 20px #c9b5d51b;
+}
+
+.card h3 {
+  font-size: 22px;
+  font-weight: normal;
+  color: #846899;
+  margin: 8px 0 12px;
+}
+
+.card p {
+  color: #917e9e;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.paper {
+  background: #fffafd;
+  color: #654c72;
+  padding: 27px 23px;
+  border: 1px solid #f0e3f2;
+  border-radius: 5px 20px 5px 20px;
+  box-shadow: 5px 8px 0 #d9c8e433;
+  transform: rotate(-.7deg);
+  margin: 24px 4px;
+}
+
+.paper h3 {
+  font-size: 27px;
+  font-weight: normal;
+  color: #9270a8;
+  margin-top: 0;
+}
+
+.paper p {
+  color: #806b8a;
+  font-size: 15px;
+  line-height: 2;
+}
+
+.tickets {
+  display: grid;
+  gap: 13px;
+  margin-top: 20px;
+}
+
+.ticket {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 17px;
+  color: #765b8c;
+  background: linear-gradient(140deg, #ffffff, #f2e8fa);
+  border: 1px solid #e8dcf2;
+  border-radius: 17px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 5px 15px #d2bee01b;
+}
+
+.ticket:after {
+  content: "♡";
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  color: #c5a6e0;
+}
+
+.ticket-icon {
+  font-size: 31px;
+  text-align: center;
+}
+
+.ticket strong {
+  display: block;
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 6px;
+  color: #826493;
+}
+
+.ticket small {
+  font: 10px/1.6 Arial, sans-serif;
+  color: #a18eae;
+}
+
+.ticket-content {
+  display: none;
+  padding: 16px;
+  margin-top: 8px;
+  background: #f0e7f8;
+  border: 1px solid #e7d9f1;
+  border-radius: 13px;
+  color: #806b8a;
+  font: 13px/1.9 Arial, sans-serif;
+}
+
+.ticket-content.show {
+  display: block;
+  animation: fade .4s;
+}
+
+.upload {
+  display: block;
+  padding: 15px;
+  text-align: center;
+  border: 1px dashed #c8adde;
+  color: #9274aa;
+  background: #fcf9ff;
+  border-radius: 14px;
+  margin: 15px 0;
+  font: 12px Arial, sans-serif;
+  cursor: pointer;
+}
+
+input[type=file] { display: none; }
+
+input[type=text],
+input[type=date],
+textarea {
+  width: 100%;
+  padding: 13px;
+  margin: 7px 0;
+  color: #765b8c;
+  background: #fff;
+  border: 1px solid #e4d7ee;
+  border-radius: 12px;
+  outline: none;
+}
+
+textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #b5a3c0;
+}
+
+label {
+  font: 12px Arial, sans-serif;
+  color: #927aa2;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 17px;
+}
+
+.polaroid {
+  padding: 9px 9px 13px;
+  background: #fff;
+  color: #654c72;
+  border: 1px solid #f0e7f4;
+  box-shadow: 0 5px 16px #c5b0d21c;
+  transform: rotate(-1deg);
+}
+
+.polaroid:nth-child(even) { transform: rotate(1deg); }
+
+.polaroid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  border-radius: 2px;
+}
+
+.polaroid p {
+  font-size: 13px;
+  text-align: center;
+  margin: 10px 0 3px;
+  overflow-wrap: anywhere;
+  color: #806b8a;
+}
+
+.polaroid button {
+  width: 100%;
+  margin-top: 7px;
+  background: #f0e6f8;
+  color: #765b8c;
+  padding: 8px;
+  border: 0;
+  border-radius: 8px;
+  font: 11px Arial, sans-serif;
+}
+
+.empty {
+  grid-column: 1/-1;
+  padding: 25px;
+  text-align: center;
+  color: #ad9ab9;
+  font: 12px/1.9 Arial, sans-serif;
+}
+
+#photoStatus, #letterStatus {
+  color: #a18eae;
+  font: 12px/1.8 Arial, sans-serif;
+}
+
+#dateResult {
+  color: #9274aa;
+  font: 13px/1.9 Arial, sans-serif;
+}
+
+.love-note {
+  padding: 25px 20px;
+  border: 1px solid #e7d8f0;
+  border-radius: 22px;
+  background: linear-gradient(140deg, #eee2f8, #fbeaf4);
+  text-align: center;
+}
+
+#surprise {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  overflow: auto;
+  background: #faf7fdf7;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+}
+
+#surprise.show {
+  display: flex;
+  animation: fade .5s;
+}
+
+.surprise-box {
+  max-width: 420px;
+  text-align: center;
+  padding: 25px;
+  border-radius: 25px;
+  background: #fff;
+  border: 1px solid #eadcf3;
+  box-shadow: 0 15px 50px #bda7d533;
+}
+
+.surprise-box h2 {
+  font-size: 35px;
+  color: #a77bc4;
+  font-weight: normal;
+}
+
+.surprise-box p {
+  line-height: 2;
+  color: #8c769b;
+  font-size: 15px;
+}
+
+footer {
+  text-align: center;
+  padding: 55px 10px 30px;
+  color: #a18eae;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.float-heart {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  animation: rise 2.8s forwards;
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.1); }
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rise {
+  from { transform: translateY(0) rotate(0); opacity: 1; }
+  to { transform: translateY(-100vh) rotate(35deg); opacity: 0; }
+}
+
+@media(min-width:600px) {
+  .tickets { grid-template-columns: 1fr 1fr; }
+  .hero { min-height: 85vh; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="lock">
+  <div class="lockbox">
+    <div class="lock-heart">♡</div>
+    <div class="eyebrow">A SECRET PLACE FOR YOU</div>
+    <h1>Untukk cowokuu tersayangg</h1>
+    <p class="muted">Disinii akuu buatt<br>khususss untukk cowokuu.</p>
+    <input id="pin" type="password" inputmode="numeric"
+      maxlength="4" placeholder="••••" aria-label="PIN">
+    <button class="btn full" onclick="unlock()">Bukaa sayanggku </button>
+    <div id="error"></div>
+    <p class="muted">Petunjuk: tanggaal dann bulann kitaa bertemuu</p>
+  </div>
+</div>
+
+<div id="site">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">untukk orangg favoritekuu</div>
+      <h1>It's always<br><em>you.</em></h1>
+      <p>
+        Dariii sekiann hadiahh yangg dapetiinn,<br>
+        salaahh satuu yangg akuu syukurii adalahh<br>
+        bisaa menjadii pasangaann sayangg<3.
+      </p>
+      <div class="heartline">♡ ✦ ♡</div>
+      <button class="btn" onclick="document.getElementById('opening').scrollIntoView({behavior:'smooth'})">
+        Baca cerita kita ↓
+      </button>
+      <div class="scrollhint">A LITTLE GIFT MADE WITH LOVE</div>
+    </div>
+  </div>
+
+  <nav>
+    <a href="#opening">Untukmu</a>
+    <a href="#scrapbook">Album</a>
+    <a href="#tickets">Potongan kenangan</a>
+    <a href="#letters">Surat cinta</a>
+    <a href="#date">Hari spesial</a>
+    <a href="#surpriseSection">Kejutan</a>
+  </nav>
+
+  <main>
+    <section id="opening">
+      <div class="kicker">01 — I</div>
+      <h2 class="section-title">Halook, kesayangankuuu.</h2>
+      <p class="intro">kalau sayamgg lagi bacaa inii, berartii sayangg udahh sampaii di tempatt kecill yang akuu buatt khusus buat kamuu.</p>
+
+      <div class="paper">
+        <h3>Dear, Helgaa</h3>
+        <p>
+          sayangg akuu buatt inii bukann karnaa punyaa hall mewaah yg haruss diberikann. 
+          tapii sayangg, akuu pengenn kamuu teruss bukaa web inii biarr kamuu gaa merasaa sendirii,
+          biarr sayangg selaluu ingett adaa akuu disinii yg sayangg bangett samaa kamuuuu.
+          <br><br>
+          isinyaa memangg sederhanaa sayangg, inii bukann apaa apaa. 
+          tapii akuu berharaapp ketikaa sayangg bacaa,
+          sayangg teruss hepiii dann senyuuummmm. 
+        </p>
+        <p style="text-align:right">— someone who loves you</p>
+      </div>
+    </section>
+
+    <section id="scrapbook">
+      <div class="kicker">02 — LOVE</div>
+      <h2 class="section-title">Ceritaa kitaaa</h2>
+      <p class="intro">
+        Fotoo atauu ss ann dimanaa akuu sampaaii saatt imii bahagiaaa.
+      </p>
+
+      <div class="card">
+        <label class="upload" for="photos">＋Muwah</label>
+        <input id="photos" type="file" accept="image/*" multiple>
+        <p class="muted" id="photoStatus">Albumm kenangannn</p>
+        <div class="grid" id="photoGrid">
+          <div class="empty">walauu sekedarr ss'an,tapii inii berartii</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tickets">
+      <div class="kicker">03 — YOU</div>
+      <h2 class="section-title">Hall kecill buwatt sayangg</h2>
+      <p class="intro">Pencett satuu-satuu. Setiappnyaa nyimpenn pesann bedaa.</p>
+
+      <div class="tickets">
+        <div>
+          <button class="ticket" onclick="toggleTicket(0)">
+            <div class="ticket-icon">🌙</div>
+            <div><strong>Buat malam yang berat</strong><small>OPEN WHEN YOU'RE TIRED</small></div>
+          </button>
+          <div class="ticket-content" id="ticket0">
+            Sayangg udaa berusahaa sejauuhh inii. Jadii jangann
+            lupaa untukk istirahatt yaakk sayangggkuu. 
+            Akuu haraapp sayangg tiapp malamm selaluu hepii, jangann 
+            mikirinn yg belumm pastii, lopyuu. 
+          </div>
+        </div>
+
+        <div>
+          <button class="ticket" onclick="toggleTicket(1)">
+            <div class="ticket-icon">💌</div>
+            <div><strong>Kaloo sayangg kangenn aku</strong><small>OPEN WHEN YOU MISS ME</small></div>
+          </button>
+          <div class="ticket-content" id="ticket1">
+            Sayangg bisaa bacaa chatt kitaa yg lucuu lucuu, 
+            damn sayangg bisaa liatt potoo akuu. Sayangg bisa
+            dengerinn laguu yg ngingetinn ke akuu, dan yang
+            lebihh pentingg, akuu jugaa pastinyaa kangenn cowokuu.
+          </div>
+        </div>
+
+        <div>
+          <button class="ticket" onclick="toggleTicket(2)">
+            <div class="ticket-icon">☁️</div>
+            <div><strong>Kaloo sayangg sedihh</strong><small>OPEN WHEN YOU FEEL DOWN</small></div>
+          </button>
+          <div class="ticket-content" id="ticket2">
+            Gapapaa sayaangg sedihh, gapapaa sayangg nangiiss.
+            sayangg bolee nangiss selagii buatt sayangg tenangg,
+            tapii ingett sayangg jangann cedihh berlarut"
+            dann sayangg jangan merasa kurangg, adaa akuu disinii
+            yangg nemeninn sayangg  gimanaa pun keadaann sayangg.
+          </div>
+        </div>
+
+        <div>
+          <button class="ticket" onclick="toggleTicket(3)">
+            <div class="ticket-icon">💜</div>
+            <div><strong>Kenapaa akuu pilihh sayangg</strong><small>OPEN JUST BECAUSE</small></div>
+          </button>
+          <div class="ticket-content" id="ticket3">
+            karenaa darii sekiann banyakk orangg yang akuu
+            temui, cumaa sayangg yg buatt akuu myaman, darii caraa
+            sayangg memperlakukaan akuu, sayangg yg menjadii diri
+            sendirii dann akuu sukaa sayangg. 
+            because it's you, and i wouldn't want it any other way.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="letters">
+      <div class="kicker">04 — SO</div>
+      <h2 class="section-title">Surat sederhana buatt sayangg</h2>
+      <p class="intro">Dibacaa yaakk sayanggkuu.</p>
+      <div class="card">
+        <h3>My dearest love,</h3>
+        <textarea id="letter" placeholder="Sayang, ada sesuatu yang ingin aku katakan kepadamu..."></textarea>
+        <button class="btn" onclick="saveLetter()">Simpan surat</button>
+        <p id="letterStatus"></p>
+      </div>
+    </section>
+
+    <section id="date">
+      <div class="kicker">05 — MUCH</div>
+      <h2 class="section-title">Harii spesial kitaa 🗓️</h2>
+      <p class="intro">Tanggal yangg haruss selaluu kita ingatt.</p>
+      <div class="card">
+        <label for="dateName">Harii bertemuu</label>
+        <input type="text" id="dateName" placeholder="Contoh: Hari kita jadian">
+        <label for="specialDate">Tanggal spesiall</label>
+        <input type="date" id="specialDate">
+        <button class="btn" onclick="saveDate()">Simpan hari spesial</button>
+        <p id="dateResult"></p>
+      </div>
+    </section>
+
+    <section id="surpriseSection">
+      <div class="kicker">06 — HELGAA SAYANGG</div>
+      <h2 class="section-title">Adaa lagii sayanggkuu...</h2>
+      <p class="intro">Satuu pesann kecill disinii.</p>
+      <div class="card" style="text-align:center;padding:30px 20px">
+        <div style="font-size:46px;margin-bottom:18px">🎁</div>
+        <p>Untukk cowokuu yg gantengg imutt lucuu gemoii baikk muwaa.</p>
+        <button class="btn" onclick="openSurprise()">Buka kejutan</button>
+      </div>
+    </section>
+
+    <footer>
+      Made with love, just for you.<br>
+      <span style="color:#b18bcf">You are the most beautiful part of my story. ♡</span>
+    </footer>
+  </main>
+</div>
+
+<div id="surprise">
+  <div class="surprise-box">
+    <div style="font-size:65px">💜</div>
+    <div class="eyebrow">A LITTLE MESSAGE JUST FOR YOU</div>
+    <h2>It's you. Always you.</h2>
+    <p>
+      Sayangg Terimakasihh sudaah adaa dihiduppkuu. 
+      Sayangg udaa buatt hidupp akuu gaa kesepiann,
+      akuu bahagiaa bangett samaa sayangg, kedepannyaa
+      kitaa teruss salingg menghargaii dann memahamii satu
+      samaa lainn yaakk sayangg. sayangg makasii banyakk 
+      sudahh sabarr samaa akuu, akuu memangg Terkadangg masi
+      buatt sayangg sedihh, kecewaa. tapii akuu selaluu
+      bersyukurr karnaa punyaaa sayangg. 
+      <br><br>
+      makasihh sayangg sudaah milihh akuu Sebagaii pasangann
+      sayangg. akuu gaakaann mengecewakann sayangg <3
+      <br><br>
+      <em>i'm so lucky to have you.</em>
+    </p>
+    <button class="btn" onclick="closeSurprise()">Simpan di hati ♡</button>
+  </div>
+</div>
+
+<script>
+const CORRECT_PIN = "2306";
+const DB_NAME = "LoveScrapbookLilacDB";
+const STORE = "photos";
+let db;
+
+function unlock() {
+  if (document.getElementById("pin").value === CORRECT_PIN) {
+    document.getElementById("lock").style.display = "none";
+    document.getElementById("site").style.display = "block";
+    loadEverything();
+  } else {
+    document.getElementById("error").textContent =
+      "PIN-nya belum tepat, coba lagi ya ♡";
+    document.getElementById("pin").value = "";
+  }
+}
+
+document.getElementById("pin").addEventListener("keydown", e => {
+  if (e.key === "Enter") unlock();
+});
+
+function toggleTicket(n) {
+  document.getElementById("ticket" + n).classList.toggle("show");
+}
+
+function openSurprise() {
+  document.getElementById("surprise").classList.add("show");
+
+  for (let i = 0; i < 22; i++) {
+    const h = document.createElement("div");
+    h.className = "float-heart";
+    h.textContent = ["♡", "♥", "✦", "💜"][Math.floor(Math.random() * 4)];
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.bottom = "-25px";
+    h.style.fontSize = (18 + Math.random() * 22) + "px";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 3000);
+  }
+}
+
+function closeSurprise() {
+  document.getElementById("surprise").classList.remove("show");
+}
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    if (!("indexedDB" in window)) {
+      reject(new Error("IndexedDB tidak tersedia"));
+      return;
+    }
+
+    const request = indexedDB.open(DB_NAME, 1);
+
+    request.onupgradeneeded = () => {
+      if (!request.result.objectStoreNames.contains(STORE)) {
+        request.result.createObjectStore(STORE, {
+          keyPath: "id",
+          autoIncrement: true
+        });
+      }
+    };
+
+    request.onsuccess = () => {
+      db = request.result;
+      resolve(db);
+    };
+
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function transact(mode, action) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, mode);
+    const request = action(tx.objectStore(STORE));
+    let result;
+
+    if (request) {
+      request.onsuccess = () => result = request.result;
+      request.onerror = () => reject(request.error);
+    }
+
+    tx.oncomplete = () => resolve(result);
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+}
+
+document.getElementById("photos").addEventListener("change", async function() {
+  const files = Array.from(this.files);
+  const status = document.getElementById("photoStatus");
+
+  try {
+    if (!db) await openDB();
+    status.textContent = "Menyimpan foto...";
+
+    for (const file of files) {
+      if (file.type.startsWith("image/")) {
+        await transact("readwrite", store => store.add({
+          blob: file,
+          name: file.name,
+          caption: file.name.replace(/\.[^.]+$/, ""),
+          time: Date.now()
+        }));
+      }
+    }
+
+    status.textContent = "Foto berhasil disimpan di album ♡";
+    await renderPhotos();
+  } catch (error) {
+    status.textContent =
+      "Foto belum bisa disimpan di pratinjau ini. Coba buka lewat Chrome.";
+  }
+
+  this.value = "";
+});
+
+async function renderPhotos() {
+  const grid = document.getElementById("photoGrid");
+  const photos = await transact("readonly", store => store.getAll());
+
+  grid.innerHTML = "";
+
+  if (!photos.length) {
+    grid.innerHTML =
+      '<div class="empty">Belum ada foto. Tambahkan kenangan pertama kalian ♡</div>';
+    return;
+  }
+
+  photos.sort((a, b) => a.time - b.time);
+
+  photos.forEach(photo => {
+    const item = document.createElement("div");
+    item.className = "polaroid";
+
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(photo.blob);
+    img.alt = "Foto kenangan";
+
+    const caption = document.createElement("p");
+    caption.textContent = photo.caption || "Our memory ♡";
+
+    const btn = document.createElement("button");
+    btn.textContent = "Hapus foto";
+    btn.onclick = async () => {
+      if (confirm("Hapus foto kenangan ini?")) {
+        await transact("readwrite", store => store.delete(photo.id));
+        renderPhotos();
+      }
+    };
+
+    item.append(img, caption, btn);
+    grid.appendChild(item);
+  });
+}
+
+function saveLetter() {
+  try {
+    localStorage.setItem(
+      "loveScrapbookLilacLetter",
+      document.getElementById("letter").value
+    );
+    document.getElementById("letterStatus").textContent =
+      "Surat berhasil disimpan ♡";
+  } catch (error) {
+    document.getElementById("letterStatus").textContent =
+      "Browser tidak dapat menyimpan surat.";
+  }
+}
+
+function saveDate() {
+  try {
+    localStorage.setItem("loveLilacDateName",
+      document.getElementById("dateName").value);
+    localStorage.setItem("loveLilacDate",
+      document.getElementById("specialDate").value);
+    showDate();
+  } catch (error) {
+    document.getElementById("dateResult").textContent =
+      "Tanggal belum bisa disimpan.";
+  }
+}
+
+function showDate() {
+  const name = localStorage.getItem("loveLilacDateName") || "";
+  const date = localStorage.getItem("loveLilacDate") || "";
+
+  document.getElementById("dateName").value = name;
+  document.getElementById("specialDate").value = date;
+
+  document.getElementById("dateResult").textContent = date
+    ? (name ? name + " — " : "") +
+      new Date(date + "T00:00:00").toLocaleDateString("id-ID", {
+        day: "numeric", month: "long", year: "numeric"
+      }) + " ♡"
+    : "";
+}
+
+async function loadEverything() {
+  document.getElementById("letter").value =
+    localStorage.getItem("loveScrapbookLilacLetter") || "";
+
+  showDate();
+
+  try {
+    await openDB();
+    await renderPhotos();
+  } catch (error) {
+    document.getElementById("photoStatus").textContent =
+      "Penyimpanan foto tidak tersedia di tampilan ini.";
+  }
+}
+</script>
+
+</body>
+</html>
