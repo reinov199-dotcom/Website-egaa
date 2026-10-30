@@ -766,6 +766,21 @@ footer {
       <span style="color:#b18bcf">You are the most beautiful part of my story. ♡</span>
     </footer>
   </main>
+
+  <!-- PEMUTAR MUSIK -->
+  <div class="music-player">
+    <div class="music-icon">♫</div>
+    <div class="music-info">
+      <strong>A Little Love Song</strong>
+      <span>untukk cowokuu ♡</span>
+    </div>
+    <button id="musicToggle">▶</button>
+    <audio id="loveMusic" src="Musik.mp3" loop></audio>
+  </div>
+
+</div>
+
+<div id="surprise">
 </div>
 
 <div id="surprise">
@@ -1006,17 +1021,6 @@ async function loadEverything() {
       "Penyimpanan foto tidak tersedia di tampilan ini.";
   }
 }
-</script>
-<div class="music-player">
-  <div class="music-icon">♫</div>
-  <div class="music-info">
-    <strong>A Little Love Song</strong>
-    <span>For my Egaa ♡</span>
-  </div>
-  <button id="musicToggle">▶</button>
-  <audio id="loveMusic" src="Musik.mp3" loop></audio>
-</div>
-
 <script>
 const music = document.getElementById("loveMusic");
 const musicBtn = document.getElementById("musicToggle");
