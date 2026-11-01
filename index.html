@@ -781,9 +781,6 @@ footer {
 </div>
 
 <div id="surprise">
-</div>
-
-<div id="surprise">
   <div class="surprise-box">
     <div style="font-size:65px">💜</div>
     <div class="eyebrow">A LITTLE MESSAGE JUST FOR YOU</div>
@@ -807,11 +804,23 @@ footer {
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const CORRECT_PIN = "2306";
-const DB_NAME = "LoveScrapbookLilacDB";
-const STORE = "photos";
-let db;
+const SUPABASE_URL = "https://zarhnrlpdtuqvtrqcxiz.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_4OqhXKUAv-ZFbJscMAfmnw_UzsdMU9q";
+const SUPABASE_BUCKET = "Foto-egarhw";
+let supabaseClient = null;
+try {
+  if (window.supabase && window.supabase.createClient) {
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+  }
+} catch (error) {
+  console.error("Supabase initialization error:", error);
+}
 
 function unlock() {
   if (document.getElementById("pin").value === CORRECT_PIN) {
@@ -853,74 +862,43 @@ function closeSurprise() {
   document.getElementById("surprise").classList.remove("show");
 }
 
-function openDB() {
-  return new Promise((resolve, reject) => {
-    if (!("indexedDB" in window)) {
-      reject(new Error("IndexedDB tidak tersedia"));
-      return;
-    }
-
-    const request = indexedDB.open(DB_NAME, 1);
-
-    request.onupgradeneeded = () => {
-      if (!request.result.objectStoreNames.contains(STORE)) {
-        request.result.createObjectStore(STORE, {
-          keyPath: "id",
-          autoIncrement: true
-        });
-      }
-    };
-
-    request.onsuccess = () => {
-      db = request.result;
-      resolve(db);
-    };
-
-    request.onerror = () => reject(request.error);
-  });
-}
-
-function transact(mode, action) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, mode);
-    const request = action(tx.objectStore(STORE));
-    let result;
-
-    if (request) {
-      request.onsuccess = () => result = request.result;
-      request.onerror = () => reject(request.error);
-    }
-
-    tx.oncomplete = () => resolve(result);
-    tx.onerror = () => reject(tx.error);
-    tx.onabort = () => reject(tx.error);
-  });
+function safeFileName(name) {
+  return name.normalize("NFKD").replace(/[^\w.-]+/g, "_").replace(/^_+|_+$/g, "");
 }
 
 document.getElementById("photos").addEventListener("change", async function() {
-  const files = Array.from(this.files);
+  const files = Array.from(this.files || []);
   const status = document.getElementById("photoStatus");
 
+  if (!files.length) return;
+
   try {
-    if (!db) await openDB();
-    status.textContent = "Menyimpan foto...";
+    if (!supabaseClient) {
+      status.textContent = "Album online belum tersambung. Coba refresh halaman.";
+      return;
+    }
+    status.textContent = "Mengunggah foto ke album online...";
 
     for (const file of files) {
-      if (file.type.startsWith("image/")) {
-        await transact("readwrite", store => store.add({
-          blob: file,
-          name: file.name,
-          caption: file.name.replace(/\.[^.]+$/, ""),
-          time: Date.now()
-        }));
-      }
+      if (!file.type.startsWith("image/")) continue;
+
+      const path = `album/${Date.now()}-${crypto.randomUUID()}-${safeFileName(file.name)}`;
+      const { error } = await supabaseClient.storage
+        .from(SUPABASE_BUCKET)
+        .upload(path, file, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type
+        });
+
+      if (error) throw error;
     }
 
-    status.textContent = "Foto berhasil disimpan di album ♡";
+    status.textContent = "Foto berhasil diunggah ke album online ♡";
     await renderPhotos();
   } catch (error) {
-    status.textContent =
-      "Foto belum bisa disimpan di pratinjau ini. Coba buka lewat Chrome.";
+    console.error("Supabase upload error:", error);
+    status.textContent = "Upload gagal: " + (error.message || "Periksa koneksi dan Storage Policies.");
   }
 
   this.value = "";
@@ -928,36 +906,70 @@ document.getElementById("photos").addEventListener("change", async function() {
 
 async function renderPhotos() {
   const grid = document.getElementById("photoGrid");
-  const photos = await transact("readonly", store => store.getAll());
+  const status = document.getElementById("photoStatus");
 
-  grid.innerHTML = "";
-
-  if (!photos.length) {
-    grid.innerHTML =
-      '<div class="empty">Belum ada foto. Tambahkan kenangan pertama kalian ♡</div>';
+  if (!supabaseClient) {
+    status.textContent = "Album online belum tersambung. Coba refresh halaman.";
     return;
   }
 
-  photos.sort((a, b) => a.time - b.time);
+  const { data: photos, error } = await supabaseClient.storage
+    .from(SUPABASE_BUCKET)
+    .list("album", {
+      limit: 100,
+      sortBy: { column: "created_at", order: "asc" }
+    });
 
-  photos.forEach(photo => {
+  if (error) {
+    console.error("Supabase list error:", error);
+    status.textContent = "Foto belum bisa dimuat: " + error.message;
+    return;
+  }
+
+  const imageFiles = (photos || []).filter(photo => photo.name && photo.id);
+  grid.innerHTML = "";
+
+  if (!imageFiles.length) {
+    grid.innerHTML = '<div class="empty">Belum ada foto. Tambahkan kenangan pertama kalian ♡</div>';
+    return;
+  }
+
+  imageFiles.forEach(photo => {
+    const path = `album/${photo.name}`;
+    const { data: publicData } = supabaseClient.storage
+      .from(SUPABASE_BUCKET)
+      .getPublicUrl(path);
+
     const item = document.createElement("div");
     item.className = "polaroid";
 
     const img = document.createElement("img");
-    img.src = URL.createObjectURL(photo.blob);
+    img.src = publicData.publicUrl;
     img.alt = "Foto kenangan";
+    img.loading = "lazy";
 
     const caption = document.createElement("p");
-    caption.textContent = photo.caption || "Our memory ♡";
+    caption.textContent = photo.name.replace(/^\d+-[a-f0-9-]+-/i, "").replace(/\.[^.]+$/, "").replace(/_/g, " ") || "Our memory ♡";
 
     const btn = document.createElement("button");
     btn.textContent = "Hapus foto";
     btn.onclick = async () => {
-      if (confirm("Hapus foto kenangan ini?")) {
-        await transact("readwrite", store => store.delete(photo.id));
-        renderPhotos();
+      if (!confirm("Hapus foto kenangan ini?")) return;
+
+      btn.disabled = true;
+      const { error: deleteError } = await supabaseClient.storage
+        .from(SUPABASE_BUCKET)
+        .remove([path]);
+
+      if (deleteError) {
+        console.error("Supabase delete error:", deleteError);
+        status.textContent = "Foto belum bisa dihapus: " + deleteError.message;
+        btn.disabled = false;
+        return;
       }
+
+      status.textContent = "Foto berhasil dihapus ♡";
+      await renderPhotos();
     };
 
     item.append(img, caption, btn);
@@ -1014,11 +1026,11 @@ async function loadEverything() {
   showDate();
 
   try {
-    await openDB();
     await renderPhotos();
   } catch (error) {
+    console.error("Supabase initialization error:", error);
     document.getElementById("photoStatus").textContent =
-      "Penyimpanan foto tidak tersedia di tampilan ini.";
+      "Album belum bisa dimuat. Periksa koneksi Supabase dan Storage Policies.";
   }
 }
 </script>
