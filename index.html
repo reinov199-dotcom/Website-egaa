@@ -991,37 +991,28 @@ function saveLetter() {
   }
 }
 
+const OUR_SPECIAL_DATE_NAME = "Hari jadian kita";
+const OUR_SPECIAL_DATE = "2026-06-23";
+
 function saveDate() {
-  try {
-    localStorage.setItem("loveLilacDateName",
-      document.getElementById("dateName").value);
-    localStorage.setItem("loveLilacDate",
-      document.getElementById("specialDate").value);
-    showDate();
-  } catch (error) {
-    document.getElementById("dateResult").textContent =
-      "Tanggal belum bisa disimpan.";
-  }
+  showDate();
+  document.getElementById("dateResult").textContent =
+    "Hari jadian kita — Selasa, 23 Juni 2026 ♡";
 }
 
 function showDate() {
-  const name = localStorage.getItem("loveLilacDateName") || "";
-  const date = localStorage.getItem("loveLilacDate") || "";
+  const name = OUR_SPECIAL_DATE_NAME;
+  const date = OUR_SPECIAL_DATE;
 
   document.getElementById("dateName").value = name;
   document.getElementById("specialDate").value = date;
-
-  document.getElementById("dateResult").textContent = date
-    ? (name ? name + " — " : "") +
-      new Date(date + "T00:00:00").toLocaleDateString("id-ID", {
-        day: "numeric", month: "long", year: "numeric"
-      }) + " ♡"
-    : "";
+  document.getElementById("dateResult").textContent =
+    "Hari jadian kita — Selasa, 23 Juni 2026 ♡";
 }
 
 async function loadEverything() {
   document.getElementById("letter").value =
-    localStorage.getItem("loveScrapbookLilacLetter") || "";
+    localStorage.getItem("loveScrapbookLilacLetter") || 'My dearest love,\n\nSiapa sangka, awal cerita kita cuma dari mabar Mobile Legends. Awalnya kita cuma main bareng, saling kenal sedikit demi sedikit, sampai akhirnya tukeran sosial media dan mulai ngobrol lebih banyak.\n\nKita nggak langsung dekat dalam sehari. Butuh waktu, obrolan, dan banyak momen kecil sampai akhirnya kita semakin nyaman satu sama lain. Sampai sekitar bulan Juli, kita mulai dekat dan akhirnya memasang lovers.\n\nLucu ya, sesuatu yang awalnya cuma permainan bisa membawa aku bertemu seseorang yang begitu berarti. Dari yang awalnya cuma teman mabar, sekarang kamu jadi orang yang selalu punya tempat spesial di hati aku.\n\nAku bersyukur kita nggak buru-buru, karena dari proses itu aku bisa mengenal kamu lebih jauh dan menyayangi kamu dengan cara yang tulus.\n\nTerima kasih sudah jadi bagian dari cerita aku. Semoga kita terus punya banyak momen indah untuk dikenang, dan semoga awal sederhana kita ini jadi awal dari cerita yang panjang.\n\nI’m so glad I met you, sayang. 💜';
 
   showDate();
 
